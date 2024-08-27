@@ -1,0 +1,6 @@
+{
+  "Title": "Strength Workout Plan",
+  "TotalTimePlanned": "1.0",
+  "WorkoutType": "strength",
+  "Structure": "[{\"IntensityClass\":\"WarmUp\",\"Name\":\"Warm up\",\"Length\":{\"Unit\":\"Second\",\"Value\":600},\"Type\":\"Step\"}, {\"IntensityClass\":\"Active\",\"Name\":\"Main Set\",\"Length\":{\"Unit\":\"Reps\",\"Value\":12},\"Type\":\"Step\",\"Description\":\"3 sets of 12 reps - Squats\"}, {\"IntensityClass\":\"Active\",\"Name\":\"Main Set\",\"Length\":{\"Unit\":\"Reps\",\"Value\":10},\"Type\":\"Step\",\"Description\":\"3 sets of 10 reps - Deadlifts\"}, {\"IntensityClass\":\"CoolDown\",\"Name\":\"Cool Down\",\"Length\":{\"Unit\":\"Second\",\"Value\":600},\"Type\":\"Step\"}]"
+}
