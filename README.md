@@ -75,91 +75,97 @@ bun run preview
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
 
 
-# TrainingPeaks OAuth Integration
+# TrainingPeaks OAuth Integration with Nuxt 3
 
-This project is a Nuxt.js application that integrates with the TrainingPeaks API using OAuth authentication. It allows users to log in, view their athlete profile, create workouts, and log out.
+This project demonstrates OAuth integration with TrainingPeaks API using Nuxt 3. It includes features such as user authentication, workout creation, and athlete profile retrieval.
 
 ## Project Structure
 
-
+```
+.
+├── components
+│   ├── CreateWorkout.vue
+│   └── auth
+│       └── OAuthLogin.vue
+├── composables
+│   ├── useAuth.ts
+│   └── useErrorHandler.ts
+├── pages
+│   ├── athlete
+│   │   ├── [...slug].vue
+│   │   └── profile.vue
+│   ├── athlete.vue
+│   ├── auth.vue
+│   ├── callback.vue
+│   └── index.vue
+├── plugins
+│   └── error-handler.ts
+├── public
+│   └── workout-template.json
+├── server
+│   └── api
+│       ├── athlete
+│       │   └── id.get.ts
+│       ├── auth
+│       │   ├── callback.get.ts
+│       │   ├── check.ts
+│       │   ├── initiate.ts
+│       │   └── logout.post.ts
+│       └── workouts
+│           └── create.post.ts
+├── app.vue
+├── nuxt.config.ts
+└── package.json
+```
 
 ## Functionality
 
 1. **OAuth Login**
    - `components/auth/OAuthLogin.vue`: Provides a UI for users to select OAuth scopes and initiate the login process.
    - `server/api/auth/initiate.ts`: Initiates the OAuth process by redirecting to TrainingPeaks authorization page.
-   - `server/api/auth/callback.ts`: Handles the OAuth callback, exchanges the code for access tokens, and stores them in cookies.
+   - `server/api/auth/callback.get.ts`: Handles the OAuth callback, exchanges the code for access tokens, and stores them in cookies.
 
 2. **Athlete Profile**
    - `pages/athlete/profile.vue`: Displays the athlete's profile information.
-   - `server/api/athlete/profile.ts`: Fetches the athlete's profile data from TrainingPeaks API.
+   - `server/api/athlete/id.get.ts`: Retrieves the athlete's ID from the cookie.
 
 3. **Workout Creation**
-   - `components/CreateWorkout.vue`: Provides a form to create new workouts.
-   - `server/api/workouts/create.post.ts`: Handles the creation of workouts using the TrainingPeaks API.
+   - `components/CreateWorkout.vue`: Provides a UI for creating workouts.
+   - `server/api/workouts/create.post.ts`: Handles the workout creation API call to TrainingPeaks.
 
-4. **Logout**
-   - `components/auth/OAuthLogin.vue`: Provides a logout button when the user is logged in.
-   - `server/api/auth/logout.post.ts`: Handles the logout process by clearing cookies.
+4. **Error Handling**
+   - `plugins/error-handler.ts`: Global error handler for consistent error logging and management.
+   - `composables/useErrorHandler.ts`: Composable for centralized error handling logic.
 
-5. **Error Handling**
-   - `composables/useErrorHandler.ts`: Provides a reusable error handling system.
+5. **Authentication State Management**
+   - `composables/useAuth.ts`: Manages authentication state and provides login/logout functionality.
 
-6. **Routing**
-   - `pages/athlete/[...slug].vue`: Catch-all route for athlete-related pages.
-   - `pages/callback.vue`: Handles the OAuth callback on the client-side.
-   - `layouts/default.vue`: Provides a common layout for all pages.
-
-7. **API Handling**
-   - `server/api/index.ts`: Central file for handling API routes.
-
-## How It Works
-
-1. Users start on the home page (`pages/index.vue`) and initiate the OAuth login process.
-2. The application redirects to TrainingPeaks for authentication.
-3. After successful authentication, TrainingPeaks redirects back to the callback URL.
-4. The server exchanges the authorization code for access tokens and stores them in cookies.
-5. Users are redirected to the athlete dashboard (`pages/athlete.vue`).
-6. The athlete dashboard displays profile information and allows workout creation.
-7. Users can log out, which clears the cookies and redirects to the home page.
-
-## Configuration
-
-- Environment variables are used for sensitive information (client ID, client secret, etc.).
-- `nuxt.config.ts` contains the Nuxt.js configuration, including runtime config and API route handling.
-
-## Error Handling
-
-The application now uses a global error handling system (`useErrorHandler` composable) to manage and display errors consistently across components.
-
-## Dependencies
-
-- Nuxt.js 3.13.0
-- Vue.js (latest)
-- @nuxtjs/axios for HTTP requests
-
-## Getting Started
+## Setup
 
 1. Clone the repository
 2. Install dependencies: `npm install`
-3. Set up environment variables in a `.env` file:
+3. Create a `.env` file in the root directory with the following content:
    ```
    CLIENT_ID=your_client_id
    CLIENT_SECRET=your_client_secret
    APP_URL=http://localhost:3000
    ```
-
 4. Run the development server: `npm run dev`
-5. Open your browser and navigate to `http://localhost:3000`
 
-## Troubleshooting
+## Development
 
-If you encounter issues with the OAuth flow:
+- The project uses Nuxt 3 with TypeScript.
+- API routes are located in the `server/api` directory.
+- Components are in the `components` directory.
+- Pages are in the `pages` directory.
 
-1. Ensure your TrainingPeaks Developer account has the correct redirect URI set (`http://localhost:3000/api/auth/callback` for local development).
-2. Check that the scopes you're requesting are allowed for your application in the TrainingPeaks Developer portal.
-3. Verify that your `.env` file contains the correct `CLIENT_ID` and `CLIENT_SECRET`.
-4. Clear your browser cookies and cache, then attempt the authentication process again.
+## Logging
+
+Robust logging is implemented throughout the application for easier debugging and development:
+
+- API responses and errors are logged in server-side API routes.
+- Client-side errors are logged using the global error handler.
+- Authentication processes log important steps and data.
 
 ## Contributing
 
