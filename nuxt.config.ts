@@ -4,6 +4,7 @@ export default defineNuxtConfig({
       "/api/**": { cors: true },
     },
   },
+
   runtimeConfig: {
     clientSecret: process.env.CLIENT_SECRET,
     public: {
@@ -11,4 +12,6 @@ export default defineNuxtConfig({
       appUrl: process.env.APP_URL || 'http://localhost:3000',
     },
   },
+
+  compatibilityDate: "2024-08-28",
 });

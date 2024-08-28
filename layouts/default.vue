@@ -1,20 +1,47 @@
 <template>
-  <div>
-    <header>
-      <!-- Your existing header content -->
-      <button v-if="isAuthenticated" @click="logout">Logout</button>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="header-content">
+        <h1>Pro Cycling Strength</h1>
+        <nav>
+          <NuxtLink to="/" class="nav-link">Home</NuxtLink>
+          <NuxtLink v-if="isAuthenticated" to="/athlete" class="nav-link">Dashboard</NuxtLink>
+          <button v-if="isAuthenticated" @click="logout" class="logout-button">Logout</button>
+        </nav>
+      </div>
     </header>
-    <main>
+    <main class="app-main">
       <slot />
     </main>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from "vue";
-import { useAuth } from "~/composables/useAuth";
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
-const { isAuthenticated, checkAuth, logout } = useAuth();
+const router = useRouter();
+const isAuthenticated = ref(false);
+
+const checkAuth = async () => {
+  try {
+    const { data } = await useFetch("/api/auth/check");
+    isAuthenticated.value = data.value === true;
+  } catch (error) {
+    console.error("Error checking authentication:", error);
+    isAuthenticated.value = false;
+  }
+};
+
+const logout = async () => {
+  try {
+    await $fetch("/api/auth/logout", { method: "POST" });
+    isAuthenticated.value = false;
+    router.push("/");
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
+};
 
 onMounted(async () => {
   await checkAuth();
@@ -50,6 +77,7 @@ h1 {
 nav {
   display: flex;
   gap: 10px;
+  align-items: center;
 }
 
 .nav-link {
@@ -62,6 +90,20 @@ nav {
 
 .nav-link:hover {
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+.logout-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #c0392b;
 }
 
 .app-main {

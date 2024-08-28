@@ -8,10 +8,10 @@
       <NuxtLink to="/athlete/profile" class="nav-link">Profile</NuxtLink>
       <NuxtLink to="/athlete/activities" class="nav-link">Activities</NuxtLink>
       <NuxtLink to="/athlete/stats" class="nav-link">Stats</NuxtLink>
+      <NuxtLink to="/athlete/create-workout" class="nav-link">Create Workout</NuxtLink>
     </nav>
     <main>
       <NuxtPage />
-      <CreateWorkout />
     </main>
     <div v-if="error" class="error-message">{{ error }}</div>
   </div>
@@ -20,7 +20,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import CreateWorkout from "~/components/CreateWorkout.vue";
 import { useErrorHandler } from "~/composables/useErrorHandler";
 
 const router = useRouter();
@@ -35,6 +34,7 @@ onMounted(async () => {
     } else {
       const { data: id } = await useFetch("/api/athlete/id");
       athleteId.value = id;
+      console.log("Fetched Athlete ID:", id);
     }
   } catch (e) {
     handleError(e);
@@ -67,18 +67,20 @@ nav {
   padding: 10px;
   border-radius: 0 0 8px 8px;
   margin-bottom: 20px;
+  display: flex;
+  justify-content: space-around;
 }
 
 .nav-link {
   color: #3498db;
   text-decoration: none;
   padding: 10px 15px;
-  margin-right: 10px;
   border-radius: 5px;
   transition: background-color 0.3s ease;
 }
 
-.nav-link:hover {
+.nav-link:hover,
+.nav-link.router-link-active {
   background-color: #e9ecef;
 }
 
